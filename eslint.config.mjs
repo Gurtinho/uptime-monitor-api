@@ -1,12 +1,14 @@
-// eslint.config.cjs
 import eslintPluginPrettier from 'eslint-plugin-prettier';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import pluginImport from 'eslint-plugin-import';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export default [
   {
-    ignores: ['node_modules', 'dist', 'build'], // substitui .eslintignore
+    ignores: ['node_modules', 'dist', 'build', 'coverage'], // substitui .eslintignore
   },
   {
     files: ['**/*.{ts,tsx,js}'],
@@ -14,7 +16,7 @@ export default [
       parser: tsParser,
       parserOptions: {
         ecmaVersion: 'latest',
-        sourceType: 'module', // troque para 'script' se usar CommonJS
+        sourceType: 'module',
         project: './tsconfig.json',
         tsconfigRootDir: __dirname
       }

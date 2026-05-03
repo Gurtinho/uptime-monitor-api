@@ -1,65 +1,68 @@
-import type { IMonitorRepository } from "../iMonitorRepository";
-import type { CreateMonitorRequestDTO, MonitorResponseDTO, UpdateMonitorRequestDTO } from "../../dtos/monitorDTO";
-import { AppError } from "@/shared/infra/errors/appError";
+import type { IMonitorRepository } from '../iMonitorRepository';
+import type {
+  CreateMonitorRequestDTO,
+  MonitorResponseDTO,
+  UpdateMonitorRequestDTO
+} from '../../dtos/monitorDTO';
+import { AppError } from '@/shared/infra/errors/appError';
 
 export class MonitorInMemoryRepository implements IMonitorRepository {
-    public readonly monitors: MonitorResponseDTO[] = [];
+  public readonly monitors: MonitorResponseDTO[] = [];
 
-    async create(id: string, data: CreateMonitorRequestDTO): Promise<MonitorResponseDTO> {
-        if (this.monitors.find((monitor) => monitor.url === data.url)) {
-            throw new AppError("Monitor already exists", 400);
-        }
-
-        const monitor: MonitorResponseDTO = {
-            ...data,
-            id,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        }
-
-        this.monitors.push(monitor)
-        return monitor
+  async create(id: string, data: CreateMonitorRequestDTO): Promise<MonitorResponseDTO> {
+    if (this.monitors.find((monitor) => monitor.url === data.url)) {
+      throw new AppError('Monitor already exists', 400);
     }
 
-    async update(id: string, data: UpdateMonitorRequestDTO): Promise<MonitorResponseDTO> {
-        const monitor = this.monitors.find((monitor) => monitor.id === id);
-        if (!monitor) {
-            throw new AppError("Monitor not found", 404);
-        }
-        const updatedMonitor: MonitorResponseDTO = {
-            ...monitor,
-            ...data,
-            updatedAt: new Date(),
-        }
-        this.monitors[this.monitors.indexOf(monitor)] = updatedMonitor
-        return updatedMonitor;
-    }
+    const monitor: MonitorResponseDTO = {
+      ...data,
+      id,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
 
-    async delete(id: string): Promise<void> {
-        const monitor = this.monitors.find((monitor) => monitor.id === id)
-        if (!monitor) {
-            throw new AppError("Monitor not found", 404);
-        }
-        this.monitors.splice(this.monitors.indexOf(monitor), 1)
-    }
+    this.monitors.push(monitor);
+    return monitor;
+  }
 
-    async findById(id: string): Promise<MonitorResponseDTO | null> {
-        const monitor = this.monitors.find((monitor) => monitor.id === id)
-        return monitor ?? null
+  async update(id: string, data: UpdateMonitorRequestDTO): Promise<MonitorResponseDTO> {
+    const monitor = this.monitors.find((monitor) => monitor.id === id);
+    if (!monitor) {
+      throw new AppError('Monitor not found', 404);
     }
+    const updatedMonitor: MonitorResponseDTO = {
+      ...monitor,
+      ...data,
+      updatedAt: new Date()
+    };
+    this.monitors[this.monitors.indexOf(monitor)] = updatedMonitor;
+    return updatedMonitor;
+  }
 
-    async findByName(name: string): Promise<MonitorResponseDTO | null> {
-        const monitor = this.monitors.find((monitor) => monitor.name === name)
-        return monitor ?? null
+  async delete(id: string): Promise<void> {
+    const monitor = this.monitors.find((monitor) => monitor.id === id);
+    if (!monitor) {
+      throw new AppError('Monitor not found', 404);
     }
+    this.monitors.splice(this.monitors.indexOf(monitor), 1);
+  }
 
-    async findByUrl(url: string): Promise<MonitorResponseDTO | null> {
-        const monitor = this.monitors.find((monitor) => monitor.url === url)
-        return monitor ?? null
-    }
+  async findById(id: string): Promise<MonitorResponseDTO | null> {
+    const monitor = this.monitors.find((monitor) => monitor.id === id);
+    return monitor ?? null;
+  }
 
-    async findAll(): Promise<MonitorResponseDTO[]> {
-        return this.monitors
-    }
+  async findByName(name: string): Promise<MonitorResponseDTO | null> {
+    const monitor = this.monitors.find((monitor) => monitor.name === name);
+    return monitor ?? null;
+  }
 
+  async findByUrl(url: string): Promise<MonitorResponseDTO | null> {
+    const monitor = this.monitors.find((monitor) => monitor.url === url);
+    return monitor ?? null;
+  }
+
+  async findAll(): Promise<MonitorResponseDTO[]> {
+    return this.monitors;
+  }
 }
