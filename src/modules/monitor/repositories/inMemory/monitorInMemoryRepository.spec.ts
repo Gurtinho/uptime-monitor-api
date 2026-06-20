@@ -1,8 +1,8 @@
 import { describe, expect, it, beforeEach } from "vitest"
-import type { IMonitorRepository } from "./iMonitorRepository"
-import { MonitorInMemoryRepository } from "./inMemory/monitorInMemoryRepository"
+import type { IMonitorRepository } from "../iMonitorRepository"
+import { MonitorInMemoryRepository } from "./monitorInMemoryRepository"
 import { randomUUID } from "crypto"
-import { StatusEnum, type MonitorResponseDTO } from "../dtos/monitorDTO"
+import { StatusEnum, type MonitorResponseDTO } from "../../dtos/monitorDTO"
 
 let monitorInMemoryRepository: IMonitorRepository
 let id: string

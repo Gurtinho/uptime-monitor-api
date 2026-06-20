@@ -1,6 +1,7 @@
 import { config } from "dotenv"
 import { execSync } from "child_process"
 import net from "net"
+import { prisma } from "../../../shared/infra/database/database"
 
 async function waitForDatabase(host: string, port: number, retries = 30, delayMs = 500) {
   for (let i = 0; i < retries; i++) {
@@ -27,4 +28,8 @@ export async function setup() {
     env: { ...process.env },
     stdio: "inherit",
   })
+}
+
+export async function teardown() {
+  await prisma.$disconnect()
 }
