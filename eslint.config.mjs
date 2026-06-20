@@ -2,6 +2,7 @@ import eslintPluginPrettier from 'eslint-plugin-prettier';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import pluginImport from 'eslint-plugin-import';
+import configPrettier from 'eslint-config-prettier';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
@@ -37,5 +38,6 @@ export default [
         typescript: {}
       }
     }
-  }
+  },
+  configPrettier
 ]
