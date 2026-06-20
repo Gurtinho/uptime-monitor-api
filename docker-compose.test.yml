@@ -2,7 +2,7 @@ services:
   database_test:
     image: postgres:15-alpine
     container_name: uptime-monitor-api-postgres-test
-    restart: always
+    restart: ${RESTART_DB}
     env_file:
       - .env.test
     environment:
@@ -13,6 +13,11 @@ services:
       - "${DB_PORT}:5432"
     volumes:
       - postgres_data_test:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
 
 volumes:
   postgres_data_test:

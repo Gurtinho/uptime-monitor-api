@@ -2,7 +2,7 @@ services:
   database:
     image: postgres:15-alpine
     container_name: uptime-monitor-api-postgres
-    restart: always
+    restart: ${RESTART_DB}
     env_file:
       - .env
     environment:
@@ -17,12 +17,17 @@ services:
   cache:
     image: redis:7.4-alpine
     container_name: uptime-monitor-api-redis
-    restart: always
+    restart: no
     ports:
       - "6379:6379"
     command: redis-server --requirepass ${REDIS_PASS}
     volumes:
       - redis_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
 
 volumes:
   postgres_data:
